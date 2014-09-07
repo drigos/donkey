@@ -27,11 +27,10 @@ DISPLAYSURF.fill(WHITE)
 # Define o tamanho do cabeçalho e o padding da janela e a borda da matriz
 HEADER = 100
 PADDING = min(HEIGHT-HEADER, WIDTH) * 0.03
-BORDER = min(HEIGHT-HEADER, WIDTH) * 0.01
 
 # Define as dimensões úteis para o desenho da matriz
-BODY_HEIGHT = HEIGHT - HEADER - 2*(PADDING + BORDER)
-BODY_WIDTH = WIDTH - 2*(PADDING + BORDER)
+BODY_HEIGHT = HEIGHT - HEADER - 2*PADDING
+BODY_WIDTH = WIDTH - 2*PADDING
 
 # Define o espaço entre os tiles em função do tamanho do tile
 ## Usar também o número de tiles para essa decisão
@@ -41,12 +40,12 @@ TILE_INTERSPACE_FACTOR = 0.1
 ## Calcular nível
 level = 3
 ## A partir do nível definir o número de tiles (e.g. 3x4)
-numTilesLower = 20     # Este deve ser sempre o menor lado
-numTilesGreater = 30   # Este deve ser sempre o maior lado
+numTilesLower = 2     # Este deve ser sempre o menor lado
+numTilesGreater = 3   # Este deve ser sempre o maior lado
 
 # Se a divisão da largura da tela pela altura retornar um número maior que um
 # então a tela tem orientação horizontal, caso contrário orientação vertical
-if (BODY_WIDTH / BODY_HEIGHT <= 1): # Orientação horizontal
+if (BODY_WIDTH / BODY_HEIGHT > 1): # Orientação horizontal
    # Nesse caso a maior dimensão (núm. tiles) da matriz ficará na largura
    numTilesHeight = numTilesLower
    numTilesWidth = numTilesGreater
@@ -56,22 +55,24 @@ else:                               # Orientação vertical
    numTilesWidth = numTilesLower
 
 # A fórmula usada aqui é uma fatoração da seguinte fórmula
-# BODY_HEIGHT == numTiles*tileSize + (numTiles - 1)*tileInterspace
-# Onde o tileInterspace está em função do tamanho do tile que é ## Usar também o número de tiles para essa decisão
-# BODY_HEIGHT == numTiles*tileSize + (numTiles - 1)*(tileSize*TILE_INTERSPACE_FACTOR)
-tileSizeH = BODY_HEIGHT / (numTilesHeight + (numTilesHeight - 1)*TILE_INTERSPACE_FACTOR)
-tileSizeW = BODY_WIDTH / (numTilesWidth + (numTilesWidth - 1)*TILE_INTERSPACE_FACTOR)
+# BODY_HEIGHT == numTiles*tileSize + (numTiles - 1)*tileInterspace + 2*border
+# Onde border está em função do tileInterspace (border == 2*tileInterspace)
+# Onde o tileInterspace está em função do tamanho do tile
+# BODY_HEIGHT == numTiles*tileSize + (numTiles - 1)*(tileSize*TILE_INTERSPACE_FACTOR) + 4*(tileSize*TILE_INTERSPACE_FACTOR)
+tileSizeH = BODY_HEIGHT / (numTilesHeight + TILE_INTERSPACE_FACTOR*(numTilesHeight + 3))
+tileSizeW = BODY_WIDTH / (numTilesWidth + TILE_INTERSPACE_FACTOR*(numTilesWidth + 3))
 # Como número de tiles pode variar no eixo X e Y, deve-se fazer os dois cálculo e usar o menor
 # Isso é demonstrado nos testes de mesa 1 e 2
 tileSize = min(tileSizeH, tileSizeW)
 
 # Aqui é dado um valor em pixel para o tileInterspace
-## Usar também o número de tiles para essa decisão
 tileInterspace = tileSize*TILE_INTERSPACE_FACTOR
+# Aqui é dado um valor em pixels para o border
+border = 2 * tileInterspace
 
 # Define o tamanho do board onde será desenhada a matriz
-boardSizeHeight = tileSize*numTilesHeight + tileInterspace*(numTilesHeight-1) + 2*BORDER
-boardSizeWidth = tileSize*numTilesWidth + tileInterspace*(numTilesWidth-1) + 2*BORDER
+boardSizeHeight = tileSize*numTilesHeight + tileInterspace*(numTilesHeight-1) + 2*border
+boardSizeWidth = tileSize*numTilesWidth + tileInterspace*(numTilesWidth-1) + 2*border
 # Define a margem esquerda e superior para desenhar o board
 marginUpper = (HEIGHT+HEADER - boardSizeHeight) / 2
 marginLeft = (WIDTH - boardSizeWidth) / 2
@@ -80,9 +81,9 @@ pygame.draw.rect(DISPLAYSURF, BLACK, (marginLeft, marginUpper, boardSizeWidth, b
 
 # Desenha os tiles
 for i in range(0, numTilesWidth):
-   posX = i*(tileSize+tileInterspace) + BORDER + marginLeft
+   posX = i*(tileSize+tileInterspace) + border + marginLeft
    for j in range(0, numTilesHeight):
-      posY = j*(tileSize+tileInterspace) + BORDER + marginUpper
+      posY = j*(tileSize+tileInterspace) + border + marginUpper
       pygame.draw.rect(DISPLAYSURF, GRAY, (posX, posY, tileSize, tileSize))
 
 # Executa o game loop
