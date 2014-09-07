@@ -9,6 +9,7 @@ import pygame
 from pygame.locals import *
 
 from Tile import *
+from Colors import *
 
 pygame.init()
 
@@ -19,18 +20,6 @@ WIDTH  = 600
 # Cria a janela
 DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption('Memory Matrix')
-
-# Define as cores
-BLACK   = (  0,   0,   0)
-GRAY    = (100, 100, 100)
-WHITE   = (255, 255, 255)
-RED     = (255,   0,   0)
-GREEN   = (  0, 255,   0)
-BLUE    = (  0,   0, 255)
-CYAN    = (  0, 255, 255)
-MAGENTA = (255,   0, 255)
-YELLOW  = (255, 255,   0)
-ORANGE  = (192,  64,   0)
 
 # Preenche o surface com a cor especificada
 DISPLAYSURF.fill(WHITE)
@@ -47,10 +36,10 @@ BODY_WIDTH = WIDTH - 2*PADDING
 TILE_INTERSPACE_FACTOR = 0.1
 
 ## Calcular nível
-level = 18
+level = 17
 ## A partir do nível definir o número de tiles (e.g. 3x4)
-numTilesLower = 10     # Este deve ser sempre o menor lado
-numTilesGreater = 12   # Este deve ser sempre o maior lado
+numTilesLower = 6     # Este deve ser sempre o menor lado
+numTilesGreater = 7   # Este deve ser sempre o maior lado
 
 # Se a divisão da largura da tela pela altura retornar um número maior que um
 # então a tela tem orientação horizontal, caso contrário orientação vertical
@@ -99,14 +88,16 @@ for i in range(0, numTilesHeight):
    for j in range(0, numTilesWidth):
       # Define a posição X (especifica a coluna)
       posX = j*(tileSize+tileInterspace) + border + marginLeft
-      # Concatena os Tiles para a lista row
-      row = row + [Tile(posX, posY, tileSize)]
+      # Cria as dimensões do tile
+      rect = pygame.Rect(posX, posY, tileSize, tileSize)
+      # Instancia e concatena os Tiles para a lista row
+      row = row + [Tile(rect)]
 
    # Concatena as linhas para a lista matrix
    matrix = matrix + [row]
 
 # Escolhe quais tiles irão ser marcados
-## Levar em consideração chuncks
+## Levar em consideração chuncks e as repetições
 for i in range(level):
    matrix[random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)].marked = True
 
@@ -137,7 +128,7 @@ time.sleep(3)
 for i in range(0, numTilesWidth):
    for j in range(0, numTilesHeight):
       if matrix[j][i].isMarked():
-         matrix[j][i].setColor(GRAY)
+         matrix[j][i].setColor(DIMGRAY)
          matrix[j][i].draw(DISPLAYSURF)
 
 # Executa o game loop

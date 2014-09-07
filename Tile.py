@@ -4,25 +4,21 @@
 import pygame
 from pygame.locals import *
 
+from Colors import *
+
 class Tile:
    marked = False
    selected = False
 
-   posX = 0
-   posY = 0
-   size = 0
+   rect = pygame.Rect(0, 0, 0, 0)
 
-   #color = GRAY
-   color = (100, 100, 100)
+   color = DIMGRAY
 
-   def __init__(self, posX, posY, size):
-      self.posX = posX
-      self.posY = posY
-      self.size = size
+   def __init__(self, rect):
+      self.rect = rect
 
    def draw(self, DISPLAYSURF):
-      pygame.draw.rect(DISPLAYSURF, self.color,
-                       (self.posX, self.posY, self.size, self.size))
+      pygame.draw.rect(DISPLAYSURF, self.color, self.rect)
 
    def setColor(self, color):
       self.color = color
