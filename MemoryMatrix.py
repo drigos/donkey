@@ -17,12 +17,20 @@ pygame.init()
 HEIGHT = 1000
 WIDTH  = 600
 
+# Define cores
+COLOR_WINDOW = WHITE
+COLOR_BOARD = BLACK
+COLOR_TILE = DIMGRAY
+COLOR_MARKED_TILE = CYAN
+COLOR_HOVER_TILE = GRAY
+COLOR_SELECTED_TILE = DARKSLATEGRAY
+
 # Cria a janela
 DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption('Memory Matrix')
 
 # Preenche o surface com a cor especificada
-DISPLAYSURF.fill(WHITE)
+DISPLAYSURF.fill(COLOR_WINDOW)
 
 # Define o tamanho do cabeçalho e o padding da janela e a borda da matriz
 HEADER = 100
@@ -91,7 +99,7 @@ for i in range(0, numTilesHeight):
       # Cria as dimensões do tile
       rect = pygame.Rect(posX, posY, tileSize, tileSize)
       # Instancia e concatena os Tiles para a lista row
-      row = row + [Tile(rect)]
+      row = row + [Tile(rect, COLOR_TILE)]
 
    # Concatena as linhas para a lista matrix
    matrix = matrix + [row]
@@ -104,7 +112,7 @@ for i in range(level):
 # DESENHAR
 
 # Desenha o board
-pygame.draw.rect(DISPLAYSURF, BLACK, (marginLeft, marginUpper, boardSizeWidth, boardSizeHeight))
+pygame.draw.rect(DISPLAYSURF, COLOR_BOARD, (marginLeft, marginUpper, boardSizeWidth, boardSizeHeight))
 
 # Desenha os tiles
 for i in range(0, numTilesWidth):
@@ -118,7 +126,7 @@ time.sleep(.5)
 for i in range(0, numTilesWidth):
    for j in range(0, numTilesHeight):
       if matrix[j][i].isMarked():
-         matrix[j][i].setColor(CYAN)
+         matrix[j][i].setColor(COLOR_MARKED_TILE)
          matrix[j][i].draw(DISPLAYSURF)
 
 pygame.display.update()
@@ -128,7 +136,7 @@ time.sleep(3)
 for i in range(0, numTilesWidth):
    for j in range(0, numTilesHeight):
       if matrix[j][i].isMarked():
-         matrix[j][i].setColor(DIMGRAY)
+         matrix[j][i].setColor(COLOR_TILE)
          matrix[j][i].draw(DISPLAYSURF)
 
 # Executa o game loop

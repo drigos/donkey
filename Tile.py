@@ -14,8 +14,9 @@ class Tile:
 
    color = DIMGRAY
 
-   def __init__(self, rect):
+   def __init__(self, rect, color):
       self.rect = rect
+      self.setColor(color)
 
    def draw(self, DISPLAYSURF):
       pygame.draw.rect(DISPLAYSURF, self.color, self.rect)
