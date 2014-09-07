@@ -41,8 +41,8 @@ TILE_INTERSPACE_FACTOR = 0.1
 ## Calcular nível
 level = 3
 ## A partir do nível definir o número de tiles (e.g. 3x4)
-numTilesLower = 2     # Este deve ser sempre o menor lado
-numTilesGreater = 3   # Este deve ser sempre o maior lado
+numTilesLower = 20     # Este deve ser sempre o menor lado
+numTilesGreater = 30   # Este deve ser sempre o maior lado
 
 # Se a divisão da largura da tela pela altura retornar um número maior que um
 # então a tela tem orientação horizontal, caso contrário orientação vertical
@@ -69,17 +69,20 @@ tileSize = min(tileSizeH, tileSizeW)
 ## Usar também o número de tiles para essa decisão
 tileInterspace = tileSize*TILE_INTERSPACE_FACTOR
 
-# Desenha o board
+# Define o tamanho do board onde será desenhada a matriz
 boardSizeHeight = tileSize*numTilesHeight + tileInterspace*(numTilesHeight-1) + 2*BORDER
 boardSizeWidth = tileSize*numTilesWidth + tileInterspace*(numTilesWidth-1) + 2*BORDER
-## Centralizar o board
-pygame.draw.rect(DISPLAYSURF, BLACK, (PADDING, PADDING, boardSizeWidth, boardSizeHeight))
+# Define a margem esquerda e superior para desenhar o board
+marginUpper = (HEIGHT+HEADER - boardSizeHeight) / 2
+marginLeft = (WIDTH - boardSizeWidth) / 2
+# Desenha o board
+pygame.draw.rect(DISPLAYSURF, BLACK, (marginLeft, marginUpper, boardSizeWidth, boardSizeHeight))
 
 # Desenha os tiles
 for i in range(0, numTilesWidth):
-   posX = i*(tileSize+tileInterspace) + BORDER + PADDING
+   posX = i*(tileSize+tileInterspace) + BORDER + marginLeft
    for j in range(0, numTilesHeight):
-      posY = j*(tileSize+tileInterspace) + BORDER + PADDING
+      posY = j*(tileSize+tileInterspace) + BORDER + marginUpper
       pygame.draw.rect(DISPLAYSURF, GRAY, (posX, posY, tileSize, tileSize))
 
 # Executa o game loop
