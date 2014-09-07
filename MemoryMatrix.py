@@ -7,10 +7,10 @@ pygame.init()
 
 ## Capturar dimensões da tela em fullscreen
 HEIGHT = 1000
-WIDTH  = 1000
+WIDTH  = 600
 
 # Cria a janela
-DISPLAYSURF = pygame.display.set_mode((HEIGHT, WIDTH), 0, 32)
+DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption('Memory Matrix')
 
 # Define as cores
@@ -40,8 +40,8 @@ TILE_INTERSPACE_FACTOR = 0.1
 ## Calcular nível
 level = 3
 ## A partir do nível definir o número de tiles (e.g. 3x4)
-numTilesLower = 2     # Este deve ser sempre o menor lado
-numTilesGreater = 3   # Este deve ser sempre o maior lado
+numTilesLower = 6     # Este deve ser sempre o menor lado
+numTilesGreater = 7   # Este deve ser sempre o maior lado
 
 # Se a divisão da largura da tela pela altura retornar um número maior que um
 # então a tela tem orientação horizontal, caso contrário orientação vertical
