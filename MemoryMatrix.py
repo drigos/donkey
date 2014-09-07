@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import pygame, sys, random
+import numpy as np
+import pygame, sys, random, time
 from pygame.locals import *
 
 pygame.init()
 
-## Capturar dimensões da tela em fullscreen
+# Capturar dimensões da tela em fullscreen
 HEIGHT = 1000
 WIDTH  = 600
 
@@ -14,12 +15,16 @@ DISPLAYSURF = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 pygame.display.set_caption('Memory Matrix')
 
 # Define as cores
-BLACK = (  0,   0,   0)
-GRAY  = (100, 100, 100)
-WHITE = (255, 255, 255)
-RED   = (255,   0,   0)
-GREEN = (  0, 255,   0)
-BLUE  = (  0,   0, 255)
+BLACK   = (  0,   0,   0)
+GRAY    = (100, 100, 100)
+WHITE   = (255, 255, 255)
+RED     = (255,   0,   0)
+GREEN   = (  0, 255,   0)
+BLUE    = (  0,   0, 255)
+CYAN    = (  0, 255, 255)
+MAGENTA = (255,   0, 255)
+YELLOW  = (255, 255,   0)
+ORANGE  = (192,  64,   0)
 
 # Preenche o surface com a cor especificada
 DISPLAYSURF.fill(WHITE)
@@ -33,15 +38,13 @@ BODY_HEIGHT = HEIGHT - HEADER - 2*PADDING
 BODY_WIDTH = WIDTH - 2*PADDING
 
 # Define o espaço entre os tiles em função do tamanho do tile
-## Usar também o número de tiles para essa decisão
-## Caso contrário quando houver poucos tiles a borda irá ficar fina ou quando houver muitos a borda irá ficar grossa
 TILE_INTERSPACE_FACTOR = 0.1
 
 ## Calcular nível
 level = 3
 ## A partir do nível definir o número de tiles (e.g. 3x4)
-numTilesLower = 6     # Este deve ser sempre o menor lado
-numTilesGreater = 7   # Este deve ser sempre o maior lado
+numTilesLower = 10     # Este deve ser sempre o menor lado
+numTilesGreater = 12   # Este deve ser sempre o maior lado
 
 # Se a divisão da largura da tela pela altura retornar um número maior que um
 # então a tela tem orientação horizontal, caso contrário orientação vertical
@@ -76,6 +79,26 @@ boardSizeWidth = tileSize*numTilesWidth + tileInterspace*(numTilesWidth-1) + 2*b
 # Define a margem esquerda e superior para desenhar o board
 marginUpper = (HEIGHT+HEADER - boardSizeHeight) / 2
 marginLeft = (WIDTH - boardSizeWidth) / 2
+
+# Cria matriz com tiles que serão marcados (matrix[0])
+# e um segundo nível com tiles selecionados pelo usuário (matrix[1])
+matrix = np.zeros((2, numTilesHeight, numTilesWidth), 'bool')
+print matrix.shape
+print matrix.dtype
+print matrix.size
+
+## Escolher tiles marcados com base no nível
+## Levar em consideração chuncks
+matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
+matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
+matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
+matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
+matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
+
+print matrix
+
+# DESEHAR
+
 # Desenha o board
 pygame.draw.rect(DISPLAYSURF, BLACK, (marginLeft, marginUpper, boardSizeWidth, boardSizeHeight))
 
@@ -85,6 +108,28 @@ for i in range(0, numTilesWidth):
    for j in range(0, numTilesHeight):
       posY = j*(tileSize+tileInterspace) + border + marginUpper
       pygame.draw.rect(DISPLAYSURF, GRAY, (posX, posY, tileSize, tileSize))
+
+pygame.display.update()
+time.sleep(.5)
+
+# Desenha os tiles marcados
+for i in range(0, numTilesWidth):
+   for j in range(0, numTilesHeight):
+      if matrix[0][j][i]:
+         posX = i*(tileSize+tileInterspace) + border + marginLeft
+         posY = j*(tileSize+tileInterspace) + border + marginUpper
+         pygame.draw.rect(DISPLAYSURF, CYAN, (posX, posY, tileSize, tileSize))
+
+pygame.display.update()
+time.sleep(3)
+
+# Apaga os tiles marcados
+for i in range(0, numTilesWidth):
+   for j in range(0, numTilesHeight):
+      if matrix[0][j][i]:
+         posX = i*(tileSize+tileInterspace) + border + marginLeft
+         posY = j*(tileSize+tileInterspace) + border + marginUpper
+         pygame.draw.rect(DISPLAYSURF, GRAY, (posX, posY, tileSize, tileSize))
 
 # Executa o game loop
 while True:
