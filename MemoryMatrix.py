@@ -1,8 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
+import random
+import time
+
 import numpy as np
-import pygame, sys, random, time
+import pygame
 from pygame.locals import *
+
+from Tile import *
 
 pygame.init()
 
@@ -41,7 +47,7 @@ BODY_WIDTH = WIDTH - 2*PADDING
 TILE_INTERSPACE_FACTOR = 0.1
 
 ## Calcular nível
-level = 3
+level = 18
 ## A partir do nível definir o número de tiles (e.g. 3x4)
 numTilesLower = 10     # Este deve ser sempre o menor lado
 numTilesGreater = 12   # Este deve ser sempre o maior lado
@@ -80,34 +86,39 @@ boardSizeWidth = tileSize*numTilesWidth + tileInterspace*(numTilesWidth-1) + 2*b
 marginUpper = (HEIGHT+HEADER - boardSizeHeight) / 2
 marginLeft = (WIDTH - boardSizeWidth) / 2
 
-# Cria matriz com tiles que serão marcados (matrix[0])
-# e um segundo nível com tiles selecionados pelo usuário (matrix[1])
-matrix = np.zeros((2, numTilesHeight, numTilesWidth), 'bool')
-print matrix.shape
-print matrix.dtype
-print matrix.size
+# Cria a matriz que irá receber os Tiles
+matrix = []
 
-## Escolher tiles marcados com base no nível
+# Instancio os tiles da matrix
+for i in range(0, numTilesHeight):
+   # Cria cada linha da matrix
+   row = []
+   # Define a posição Y (especifica a linha)
+   posY = i*(tileSize+tileInterspace) + border + marginUpper
+
+   for j in range(0, numTilesWidth):
+      # Define a posição X (especifica a coluna)
+      posX = j*(tileSize+tileInterspace) + border + marginLeft
+      # Concatena os Tiles para a lista row
+      row = row + [Tile(posX, posY, tileSize)]
+
+   # Concatena as linhas para a lista matrix
+   matrix = matrix + [row]
+
+# Escolhe quais tiles irão ser marcados
 ## Levar em consideração chuncks
-matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
-matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
-matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
-matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
-matrix[0][random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)] = True
+for i in range(level):
+   matrix[random.randint(0, numTilesHeight-1)][random.randint(0, numTilesWidth-1)].marked = True
 
-print matrix
-
-# DESEHAR
+# DESENHAR
 
 # Desenha o board
 pygame.draw.rect(DISPLAYSURF, BLACK, (marginLeft, marginUpper, boardSizeWidth, boardSizeHeight))
 
 # Desenha os tiles
 for i in range(0, numTilesWidth):
-   posX = i*(tileSize+tileInterspace) + border + marginLeft
    for j in range(0, numTilesHeight):
-      posY = j*(tileSize+tileInterspace) + border + marginUpper
-      pygame.draw.rect(DISPLAYSURF, GRAY, (posX, posY, tileSize, tileSize))
+      matrix[j][i].draw(DISPLAYSURF)
 
 pygame.display.update()
 time.sleep(.5)
@@ -115,10 +126,9 @@ time.sleep(.5)
 # Desenha os tiles marcados
 for i in range(0, numTilesWidth):
    for j in range(0, numTilesHeight):
-      if matrix[0][j][i]:
-         posX = i*(tileSize+tileInterspace) + border + marginLeft
-         posY = j*(tileSize+tileInterspace) + border + marginUpper
-         pygame.draw.rect(DISPLAYSURF, CYAN, (posX, posY, tileSize, tileSize))
+      if matrix[j][i].isMarked():
+         matrix[j][i].setColor(CYAN)
+         matrix[j][i].draw(DISPLAYSURF)
 
 pygame.display.update()
 time.sleep(3)
@@ -126,10 +136,9 @@ time.sleep(3)
 # Apaga os tiles marcados
 for i in range(0, numTilesWidth):
    for j in range(0, numTilesHeight):
-      if matrix[0][j][i]:
-         posX = i*(tileSize+tileInterspace) + border + marginLeft
-         posY = j*(tileSize+tileInterspace) + border + marginUpper
-         pygame.draw.rect(DISPLAYSURF, GRAY, (posX, posY, tileSize, tileSize))
+      if matrix[j][i].isMarked():
+         matrix[j][i].setColor(GRAY)
+         matrix[j][i].draw(DISPLAYSURF)
 
 # Executa o game loop
 while True:

@@ -3,6 +3,7 @@
 *.exe
 *.o
 *.out
+*.pyc
 
 # Packages #
 ############
