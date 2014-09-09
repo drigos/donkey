@@ -91,7 +91,7 @@ class Board:
                        self.tileInterspace * (self.numTilesWidth-1) + \
                        2 * self.border
 
-   def setPosition(self, windowSize, offset):
+   def setPositionCentral(self, windowSize, offset):
       """Usada para definir a posição da matriz que por padrão é 0,0
          Essa função irá receber as dimensões da janela e o offset
          para centralizar a matriz na janela
@@ -101,16 +101,18 @@ class Board:
       # Variáveis locais para conter o offset da altura e largura
       offsetY, offsetX = offset
 
-      # Define a margem esquerda e superior para desenhar o board
-      self.posY = (height+offsetY - self.sizeHeight) / 2
-      self.posX = (width+offsetX - self.sizeWidth) / 2
+      # Define a margem superior e a esquerda para desenhar o board
+      marginUpper = (height+offsetY - self.sizeHeight) / 2
+      marginLeft  = (width+offsetX - self.sizeWidth) / 2
+      self.setPosition((marginUpper, marginLeft))
+
+   def setPosition(self, position):
+      """Define a posição da matriz de acordo com os valores X e Y"""
+      self.posY, self.posX = position
 
       # Após qualquer alteração da posição da matriz
       # seus tiles também devem ser atualizados
       self.updateTilesPosition()
-
-   ## Criar método para posicionar a partir de X e Y
-   ## Alterar método setPosition para setPositionCentral
 
    def updateTilesPosition(self):
       """Atualiza a posição dos tiles baseado na posição do board"""
