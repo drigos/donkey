@@ -60,7 +60,7 @@ tileSizeW = BODY_WIDTH / (numTilesWidth + TILE_INTERSPACE_FACTOR*(numTilesWidth 
 tileSize = min(tileSizeH, tileSizeW)
 
 # Com o maior tamanho possível para o tile definido, pode-se criar o board
-board = Board((numTilesHeight, numTilesWidth), tileSize, COLOR_BOARD)
+board = Board((numTilesHeight, numTilesWidth), tileSize, COLOR_BOARD, COLOR_TILE)
 # Depois de criado ele deve ser centralizado na tela
 board.setPositionCentral((HEIGHT, WIDTH), (HEADER, 0))
 # E enfim alguns tiles devem ser marcados de acordo com o nível

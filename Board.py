@@ -40,10 +40,10 @@ class Board:
    # Cor do board
    color = BLACK
 
-   def __init__(self, numTiles, tileSize, color):
+   def __init__(self, numTiles, tileSize, colorBoard, colorTile):
       """Define a cor e as dimensões do board, bem como a de seus tiles"""
       # Define a cor do board
-      self.setColor(color)
+      self.setColor(colorBoard)
       # Calcula as dimensões do board
       self.setDimensions(numTiles, tileSize)
       
@@ -60,7 +60,7 @@ class Board:
             # Cria as dimensões do tile
             rect = pygame.Rect(posX, posY, self.tileSize, self.tileSize)
             # Instancia e concatena os Tiles para a lista row
-            row = row + [Tile(rect, COLOR_TILE)]
+            row = row + [Tile(rect, colorTile)]
 
          # Concatena as linhas para a lista matrix
          self.matrix = self.matrix + [row]
