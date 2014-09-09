@@ -25,7 +25,7 @@ class Tile:
 
    def setPosition(self, position):
       """Define as dimensões do tile"""
-      posX, posY = position
+      posY, posX = position
       self.rect = (posX, posY, self.rect.width, self.rect.height)
 
    def setColor(self, color):

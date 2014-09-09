@@ -121,7 +121,7 @@ class Board:
          for j in range(0, self.numTilesWidth):
             # Define a posição X (especifica a coluna)
             posX = j*(self.tileSize+self.tileInterspace) + self.border + self.posX
-            self.matrix[i][j].setPosition((posX, posY))
+            self.matrix[i][j].setPosition((posY, posX))
 
    def setMarkedTiles(self, numMarkedTiles):
       """Escolhe quais tiles irão ser marcados"""
